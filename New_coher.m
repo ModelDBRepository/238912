@@ -67,7 +67,7 @@ plot(V_out(jj,:))
 hold on
 end
 hold off
-
+figure % TMM added
 ind = zeros(10,1000); %Preallocate binary vector of discharge instances
 for l = 1:10
     ind(l,:) = (V_out(l,:) == 50); %Return the indices where neuron 1 discharged an AP.    
@@ -92,43 +92,46 @@ fn = 1000/2; %For kinetic data at 100Hz
 new_cst = filtfilt(b,a,CSTtot);
 plot(new_cst)
 
-[s4 c4 ph ci phi]= cmtm(new_cst,I(1:1000),0.01,8,0,0,1)
+[s4 c4 ph ci phi]= cmtm(new_cst,I(1:1000),0.01,8,0,0,1);
 plot(s4,c4); xlim([0 10])
-save('coher.mat','s4','c4','-append')
+%save('coher.mat','s4','c4','-append')
+save('coher.mat','s4','c4')
 %plot(xs); hold on; plot(b);
-
-[s c ph ci phi] = cmtm(xs,b,0.01,8,0,0,1);
-s2 = s; c2= c;
-save('coher.mat','s2','c2','-append')
-xs2 = params.model.Xpca(1,:);
-save('xs.mat','xs2','-append')
-load('xs.mat')
-  %% Make into sequence for PLDS model & plot
-seq = struct();
-seq.y = double(ind);
-seq.T = 1000;
-%seq.u = ones(2,1000).*0.5;
+%%% TMM: commented out 100-123 at D Feeney's suggestion
 % 
-plot(params.model.Xpca(1,:),'LineWidth',2,'Color',[0 0 0]); hold on
-plot(xs,'k','LineWidth',2); hold on; plot(xs2,'--')
-%hold on
-%plot(downsample(I,10),'LineWidth',2,'Color',[0.25 0.25 0.25])
-%plot(CST1,'LineWidth',2,'Color',[0 0 0])
-% hold on
-%plot(CST2,'LineWidth',2,'Color',[0 0 0])
-box off
-set(gcf,'color','w')
-set(gca,'TickDir', 'out','LineWidth',2,'TickDir','out','FontSize',16);
-xlim([0 100])
-
-mscohere(params.model.Xpca,downsample(I(1:1000),10),[],[],[],100)
+% [s c ph ci phi] = cmtm(xs,b,0.01,8,0,0,1);
+% s2 = s; c2= c;
+% save('coher.mat','s2','c2','-append')
+% xs2 = params.model.Xpca(1,:);
+% save('xs.mat','xs2','-append')
+% load('xs.mat')
+%   %% Make into sequence for PLDS model & plot
+% seq = struct();
+% seq.y = double(ind);
+% seq.T = 1000;
+% %seq.u = ones(2,1000).*0.5;
+% % 
+% plot(params.model.Xpca(1,:),'LineWidth',2,'Color',[0 0 0]); hold on
+% plot(xs,'k','LineWidth',2); hold on; plot(xs2,'--')
+% %hold on
+% %plot(downsample(I,10),'LineWidth',2,'Color',[0.25 0.25 0.25])
+% %plot(CST1,'LineWidth',2,'Color',[0 0 0])
+% % hold on
+% %plot(CST2,'LineWidth',2,'Color',[0 0 0])
+% box off
+% set(gcf,'color','w')
+% set(gca,'TickDir', 'out','LineWidth',2,'TickDir','out','FontSize',16);
+% xlim([0 100])
+% 
+%%% TMM below has error
+% mscohere(params.model.Xpca,downsample(I(1:1000),10),[],[],[],100)
 set(gcf,'color','w')
 set(gca,'TickDir', 'out','LineWidth',2,'TickDir','out','FontSize',16);
 grid off
 box off
 
 ci(1:10) = 0.41;
-plot(s3,c3,'k','linewidth',2)
+figure %% TMM: missing s3: plot(s3,c3,'k','linewidth',2)
 hold on
 plot(s4,c4,'--k','linewidth',2)
 plot(ci,'--k','linewidth',2)
@@ -137,7 +140,7 @@ set(gcf,'color','w')
 set(gca,'TickDir', 'out','LineWidth',2,'TickDir','out','FontSize',16);
 xlim([1 10])
 
-plot(I, 'k')
+figure; plot(I, 'k')
 hold on
 plot(I2,'k-')
 box off
